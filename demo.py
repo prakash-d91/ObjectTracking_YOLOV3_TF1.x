@@ -3,10 +3,8 @@
 
 from __future__ import division, print_function, absolute_import
 import argparse
-import os
 from timeit import time
 import warnings
-import sys
 import cv2
 import numpy as np
 from PIL import Image
@@ -17,7 +15,7 @@ from deep_sort import nn_matching
 from deep_sort.detection import Detection
 from deep_sort.tracker import Tracker
 from tools import generate_detections as gdet
-from deep_sort.detection import Detection as ddet
+
 warnings.filterwarnings('ignore')
 
 def main(yolo,read_type):
@@ -37,7 +35,7 @@ def main(yolo,read_type):
     #writeVideo_flag = True
 
     #geneate a video object
-    video_dir='/home/liuyp/liu/mot/deep_sort_yolov3/model_data/demo2.wmv'
+    video_dir='./data/video/test.mp4'
     video=video_open(read_type,video_dir)
     video_capture = video.generate_video()
     fps=0

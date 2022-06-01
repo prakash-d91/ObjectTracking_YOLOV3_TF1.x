@@ -2,7 +2,7 @@
 /shelf/
 /workspace.xml
 .idea/*
-
+__pycache__/
 /misc.xml
 /modules.xml
 /ObjectTracking_YOLOV3_TF1.x.iml
