@@ -1,0 +1,11 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+.idea/*
+
+/misc.xml
+/modules.xml
+/ObjectTracking_YOLOV3_TF1.x.iml
+/inspectionProfiles/profiles_settings.xml
+/inspectionProfiles/Project_Default.xml
+/vcs.xml
