@@ -50,7 +50,7 @@ def main(yolo, read_type):
 
         image = Image.fromarray(frame)
         time3 = time.time()
-        boxs = yolo.detect_image(image)
+        boxs, classes, scores = yolo.detect_image(image)
         time4 = time.time()
         print('detect cost is', time4 - time3)
         # print("box_num",len(boxs))
@@ -58,7 +58,7 @@ def main(yolo, read_type):
         features = encoder(frame, boxs)
 
         # score to 1.0 here).
-        detections = [Detection(bbox, 1.0, feature) for bbox, feature in zip(boxs, features)]
+        detections = [Detection(bbox, score, class_name, feature) for bbox, feature, class_name, score in zip(boxs, features, classes, scores)]
 
         # Run non-maxima suppression.
         boxes = np.array([d.tlwh for d in detections])
@@ -94,7 +94,6 @@ def main(yolo, read_type):
         # for det in detections:
         #     bbox = det.to_tlbr()
         #     cv2.rectangle(frame,(int(bbox[0]), int(bbox[1])), (int(bbox[2]), int(bbox[3])),(255,0,0), 2)
-
         cv2.imshow('', frame)
 
         fps = (fps + (1. / (time.time() - t1))) / 2

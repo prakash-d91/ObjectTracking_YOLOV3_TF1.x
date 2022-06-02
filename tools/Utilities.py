@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ElementTree
 import time
 from datetime import datetime
 
+
 class Utils:
     trajectory_line_color = (0, 255, 0)
     trajectory_line_thickness = 2
@@ -28,32 +29,35 @@ class Utils:
         timestamp = datetime.now().timestamp()
 
         node_frame.attrib['UtcTime'] = time.strftime('%d/%m/%Y %H:%M:%S', time.localtime(timestamp))
-        for i in range(len(objects)):
+
+        for object in objects:
             node_Object = ElementTree.SubElement(node_frame, 'tt:Object')
-            node_Object.attrib['ObjectID'] = str(objects[i]['id'])
+            node_Object.attrib['ObjectID'] = str(object.track_id)
 
             node_appearance = ElementTree.SubElement(node_Object, 'tt:Appearance')
             node_shape = ElementTree.SubElement(node_appearance, 'tt:Shape')
 
+            bbox = object.to_tlbr()
+
             node_BoundaryBox = ElementTree.SubElement(node_shape, 'tt:BoundingBox')
-            node_BoundaryBox.attrib['left'] = str(objects[i]['bbox'][0])
-            node_BoundaryBox.attrib['top'] = str(objects[i]['bbox'][1])
-            node_BoundaryBox.attrib['right'] = str(objects[i]['bbox'][2])
-            node_BoundaryBox.attrib['bottom'] = str(objects[i]['bbox'][3])
+            node_BoundaryBox.attrib['left'] = str(bbox[0])
+            node_BoundaryBox.attrib['top'] = str(bbox[1])
+            node_BoundaryBox.attrib['right'] = str(bbox[2])
+            node_BoundaryBox.attrib['bottom'] = str(bbox[3])
 
             node_COG = ElementTree.SubElement(node_shape, 'tt:CenterOfGravity')
-            node_COG.attrib['x'] = str(objects[i]['center_of_gravity'][0])
-            node_COG.attrib['y'] = str(objects[i]['center_of_gravity'][1])
+            node_COG.attrib['x'] = str('0.2')
+            node_COG.attrib['y'] = str('0.5')
 
             node_class = ElementTree.SubElement(node_appearance, 'tt:Class')
             node_type = ElementTree.SubElement(node_class, 'tt:Type')
-            node_type.attrib['Likelihood'] = str(objects[i]['confidence'])
-            node_type.text = str(objects[i]['type'])
+            node_type.attrib['Likelihood'] = str('0.98')
+            node_type.text = str(object.class_name)
 
             node_Extension = ElementTree.SubElement(node_Object, 'tt:Extension')
 
             node_Path = ElementTree.SubElement(node_Extension, 'tt:Path')
-            node_Path.text = '[]'
+            node_Path.text = str(object.path)
 
         node_Extension = ElementTree.SubElement(node_frame, 'tt:Extension')
 
@@ -63,7 +67,6 @@ class Utils:
 
         print((ElementTree.tostring(root_node, encoding='unicode', method='xml')))
 
-        filename = "DT_Frame_" + str(datetime.now().strftime("%d.%m.%Y_%H%M%S")) + ".xml"
-        with open(filename, "w") as f:
-            f.write((ElementTree.tostring(root_node, encoding='unicode', method='xml')))
-
+        # filename = "DT_Frame_" + str(datetime.now().strftime("%d.%m.%Y_%H%M%S")) + ".xml"
+        # with open(filename, "w") as f:
+        #     f.write((ElementTree.tostring(root_node, encoding='unicode', method='xml')))
